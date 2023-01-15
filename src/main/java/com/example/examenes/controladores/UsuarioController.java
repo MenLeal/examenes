@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,10 @@ import com.example.examenes.servicios.UsuarioService;
 public class UsuarioController {
 
     @Autowired
-    UsuarioService usuarioService;
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/obtener/{username}")
     public Usuario obtenerUsuario(@PathVariable("username") String username) {
@@ -32,6 +36,7 @@ public class UsuarioController {
 
     @PostMapping("/guardar")
     public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception {
+        usuario.setPassword(this.bCryptPasswordEncoder.encode(usuario.getPassword()));
         Set<UsuarioRol> roles = new HashSet<>();
         Rol rol = new Rol();
         rol.setRolId(2L);

@@ -25,9 +25,7 @@ public class UsuarioServiceImp implements UsuarioService {
             System.out.println("Existe el usuario");
             throw new Exception("No tiene caso guardar ya que existe el usuario");
         } else {
-            for (UsuarioRol usuarioRol : usuarioRoles) {
-                rolRepository.save(usuarioRol.getRol());
-            }
+            usuarioRoles.stream().forEach(usuarioRol -> rolRepository.save(usuarioRol.getRol()));
             usuario.getUsuario_roles().addAll(usuarioRoles);
             usuarioLocal = usuarioRepository.save(usuario);
         }
